@@ -2,75 +2,77 @@
 #include "stdlib.h"
 #include "string.h"
 
-struct treeNode {
+struct bstNode {
   char name[30];
   int count;
-  struct treeNode *left, *right;
+  struct bstNode *left, *right;
 };
 
 
-typedef struct treeNode TreeNode;
-typedef TreeNode *TreeNodePtr;
+typedef struct bstNode bsTreeNode;
+typedef bsTreeNode *bstNodePointer;
+bstNodePointer FindMin(bstNodePointer node);
+bstNodePointer FindMax(bstNodePointer node);
 
 
-void insertNode(TreeNodePtr *treePtr, char word[30]){
-  TreeNode *temp = NULL;
-  if(*treePtr == NULL){
-    temp = (TreeNode *)malloc(sizeof(TreeNode));
+void insertNode(bstNodePointer *treePointer, char word[30]){
+  bsTreeNode *temp = NULL;
+  if(*treePointer == NULL){
+    temp = (bsTreeNode *)malloc(sizeof(bsTreeNode));
     temp->left = NULL;
     temp->right = NULL;
     strcpy(temp->name, word);
-    *treePtr = temp;
+    *treePointer = temp;
   }
-  else if(strcmp(word, (*treePtr)->name) < 0)
-    insertNode(&((*treePtr)->left), word);
-  else if(strcmp(word, (*treePtr)->name) > 0)
-    insertNode(&((*treePtr)->right), word);
+  else if(strcmp(word, (*treePointer)->name) < 0)
+    insertNode(&((*treePointer)->left), word);
+  else if(strcmp(word, (*treePointer)->name) > 0)
+    insertNode(&((*treePointer)->right), word);
 }
 
 
-void alphabetic(TreeNodePtr treePtr){
-  if(treePtr != NULL){
-    alphabetic(treePtr->left);
-    printf("%s\n", treePtr->name);
-    alphabetic(treePtr->right);
+void alphabetic(bstNodePointer treePointer){
+  if(treePointer != NULL){
+    alphabetic(treePointer->left);
+    printf("%s\n", treePointer->name);
+    alphabetic(treePointer->right);
   }
 }
 
-/*
-void deleteNode(treeNodePtr *node, char name[30])
+
+
+void deleteNode(bstNodePointer treePointer, char word[30])
 {
-  treeNode *temp;
-  if(node==NULL){
+  bstNodePointer temp;
+  if(treePointer==NULL){
     printf("Element Not Found");
   }
-  else if(strcmp(word, (*treePtr)->name) > 0)
-    node->left = deleteNode(node->left, name);
+  else if(strcmp(word, (treePointer)->name) > 0){
+    deleteNode(treePointer->left, word);
   }
-  else if(strcmp(word, (*treePtr)->name) < 0)
-    node->right = deleteNode(node->right, name);
+  else if(strcmp(word, (treePointer)->name) < 0){
+    deleteNode(treePointer->right, word);
   } else {
-    if(node->right && node->left){
-      temp = FindMin(node->right);
-      node->name = temp->name;
-      node->right = deleteNode(node->right, temp->name);
+    if(treePointer->right && treePointer->left){
+      temp = FindMin(treePointer->right);
+      strcpy(temp->name, word);
+      treePointer = temp; 
+      deleteNode(treePointer->right, temp->name);
     } else {
-      temp = node;
-      if(node->left == NULL)
-	node = node->right;
-      else if(node->right == NULL)
-	node = node->left;
-      free(temp);
-    }
-
+      temp = treePointer;
+      if(treePointer->left == NULL)
+	treePointer = treePointer->right;
+      else if(treePointer->right == NULL)
+	treePointer = treePointer->left;
+      }
   }
-  return node;
 }
 
 
 
-TreeNodePtr FindMin(TreeNodePtr *node)
-{
+
+
+bstNodePointer FindMin(bstNodePointer node){
   if(node==NULL){
     return NULL;
   }
@@ -82,8 +84,7 @@ TreeNodePtr FindMin(TreeNodePtr *node)
 }
 
 
-TreeNodePtr FindMax(TreeNodePtr *node)
-{
+bstNodePointer FindMax(bstNodePointer node){
   if(node==NULL){
     return NULL;
   }
@@ -94,7 +95,7 @@ TreeNodePtr FindMax(TreeNodePtr *node)
     return node;
 }
 
-*/
+
 
 
 
@@ -105,12 +106,12 @@ int main(){
 
   char list[30];
   FILE *fpl;
-  TreeNodePtr rootPtr = NULL;
+  bstNodePointer rootPointer = NULL;
   int c;
   fpl = fopen("names.txt", "r");
   do{
     c = fscanf(fpl, "%s\n", list);
-    insertNode(&rootPtr, list);
+    insertNode(&rootPointer, list);
 
   }while(c != EOF);
   fclose(fpl);
@@ -132,14 +133,16 @@ int main(){
       printf("Please enter name you wish to add\n\n");
       char temp[30];
       scanf("%s", temp);
-      insertNode(&rootPtr, temp);
+      insertNode(&rootPointer, temp);
     }
     else if(f1 == 2){
       printf("Please enter name you wish to remove\n\n");
-      
+      char temp[30];
+      scanf("%s", temp);
+      deleteNode(rootPointer, temp);
     }
     else if(f1 == 3){
-      alphabetic(rootPtr);
+      alphabetic(rootPointer);
       printf("\n");
     }
     else if(f1 == 4){

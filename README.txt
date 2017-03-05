@@ -10,3 +10,4 @@ selection. Using the same function that was used to insert names into the binary
 to insert whatever the user inputs after making the selection that a name is to be placed. The final
 selection is to exit and just simply breaks from the loop that would keep the user needing to make more
 inputs. 
+
