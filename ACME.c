@@ -124,7 +124,7 @@ int main(){
     printf("What would you like to do?\n");
     printf("PLEASE ENTER COMMAND NUMBER\n");
     printf("1. Add employee name\n");
-    printf("2. Remove employee name\n");
+    printf("2.p Remove employee name\n");
     printf("3. List employee names\n");
     printf("4. Quit\n\n");
     scanf("%f", &f1);
